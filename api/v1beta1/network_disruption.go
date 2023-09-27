@@ -516,7 +516,32 @@ func (h NetworkDisruptionHostSpec) Validate() error {
 		}
 	}
 
+	for _, allowedHost := range defaultAllowedHosts {
+		if allowedHost.Contains(h) {
+			return fmt.Errorf("disruption will not function as allowlist explicitly prevents disrupting %s", allowedHost)
+		}
+	}
+
 	return nil
+}
+
+// Contains returns true if the receiver host spec, h, specifies all traffic that encompasses the argument host spec, o
+func (h NetworkDisruptionHostSpec) Contains(o NetworkDisruptionHostSpec) bool {
+	if h.Flow != "" && h.Flow != o.Flow {
+		return false
+	}
+
+	if h.Host == "" {
+		if h.Port == o.Port {
+			return true
+		}
+	}
+
+	if h.Host == o.Host {
+		return true
+	}
+
+	return false
 }
 
 func (s NetworkDisruptionServiceSpec) ExtractAffectedPortsInServicePorts(k8sService *v1.Service) ([]v1.ServicePort, []NetworkDisruptionServicePortSpec) {

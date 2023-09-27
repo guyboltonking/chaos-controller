@@ -45,6 +45,7 @@ var (
 	enableSafemode                bool
 	defaultNamespaceThreshold     float64
 	defaultClusterThreshold       float64
+	defaultAllowedHosts           []NetworkDisruptionHostSpec
 	handlerEnabled                bool
 	defaultDuration               time.Duration
 	cloudServicesProvidersManager cloudservice.CloudServicesProvidersManager
